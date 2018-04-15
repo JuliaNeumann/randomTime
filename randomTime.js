@@ -30,9 +30,7 @@ function createWeekPlan(entireTime) {
     weekSlots.push(config.activities[getRandomInt(0, config.activities.length - 1)].name);
   }
 
-  console.log(weekSlots);
-  console.log(weekSlots.length * config.slotLength === entireTime);
-  shuffleArray(weekSlots)
+  shuffleArray(weekSlots);
 
   localStorage.setItem("weekPlan", JSON.stringify(weekSlots));
 }
