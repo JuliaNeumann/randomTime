@@ -35,6 +35,7 @@ exports.createWeekPlan = function createWeekPlan(entireTime) {
   shuffleArray(weekSlots);
 
   store.set("weekPlan", weekSlots);
+  console.log(`Created weekplan for ${entireTime} hours!`);
 };
 
 function getRandomInt(min, max) {
@@ -64,7 +65,6 @@ exports.getDayPlan = function getDayPlan(timeInHours) {
   let result = [];
   for (let i = 0; i < (timeInHours / config.slotLength); i++) {
     result.push(currentWeekPlan.shift());
-    console.log(currentWeekPlan);
   }
 
   store.set("weekPlan", currentWeekPlan);
