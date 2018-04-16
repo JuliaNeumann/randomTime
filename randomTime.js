@@ -49,7 +49,7 @@ function shuffleArray(array) {
   }
 }
 
-exports.getDayPlan = function getDayPlan(timeInHours) {
+exports.getDayPlan = function getDayPlan(numberOfSlots) {
   let currentWeekPlan;
   if (store.get("weekPlan")) {
     let prevWeekPlan = store.get("weekPlan");
@@ -63,7 +63,7 @@ exports.getDayPlan = function getDayPlan(timeInHours) {
   }
 
   let result = [];
-  for (let i = 0; i < (timeInHours / config.slotLength); i++) {
+  for (let i = 0; i < numberOfSlots; i++) {
     result.push(currentWeekPlan.shift());
   }
 

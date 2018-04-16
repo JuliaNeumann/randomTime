@@ -9,15 +9,16 @@ app.get("/", function(req, res) {
 });
 
 app.get("/weekplan/:hours", function(req, res) {
-  if (parseInt(req.params.hours) < 20) {
+  if (parseInt(req.params.hours) <= 20) {
     randomTime.createWeekPlan(parseInt(req.params.hours));
     res.send(`Created weekplan for ${req.params.hours} hours!`);
   }
+  res.send("");
 });
 
-app.get("/dayplan/:hours", function(req, res) {
-  if (parseInt(req.params.hours) < 20) {
-    const dayPlan = randomTime.getDayPlan(parseInt(req.params.hours));
+app.get("/dayplan/:slots", function(req, res) {
+  if (parseInt(req.params.slots) <= 40) {
+    const dayPlan = randomTime.getDayPlan(parseInt(req.params.slots));
     if (dayPlan) {
       let response = '';
       dayPlan.forEach(function eachTask(task) {
@@ -28,6 +29,7 @@ app.get("/dayplan/:hours", function(req, res) {
     }
     res.send('No weekplan set.');
   }
+  res.send("");
 });
 
 // bind the app to listen for connections on a specified port
