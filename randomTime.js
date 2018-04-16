@@ -1,3 +1,5 @@
+const store = require('data-store')('randomtime');
+
 const config = {
   slotLength: 0.5,
   activities: [
@@ -16,7 +18,7 @@ const config = {
   ]
 };
 
-function createWeekPlan(entireTime) {
+exports.createWeekPlan = function createWeekPlan(entireTime) {
   const numberOfSlots = entireTime / config.slotLength;
   const weekSlots = [];
   config.activities.forEach((activity) => {
@@ -32,8 +34,8 @@ function createWeekPlan(entireTime) {
 
   shuffleArray(weekSlots);
 
-  localStorage.setItem("weekPlan", JSON.stringify(weekSlots));
-}
+  store.set("weekPlan", weekSlots);
+};
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -46,10 +48,10 @@ function shuffleArray(array) {
   }
 }
 
-function getDayPlan(timeInHours) {
+exports.getDayPlan = function getDayPlan(timeInHours) {
   let currentWeekPlan;
-  if (localStorage.getItem("weekPlan")) {
-    let prevWeekPlan = JSON.parse(localStorage.getItem("weekPlan"));
+  if (store.get("weekPlan")) {
+    let prevWeekPlan = store.get("weekPlan");
     if (prevWeekPlan.length > 0) {
       currentWeekPlan = prevWeekPlan;
     }
@@ -59,9 +61,13 @@ function getDayPlan(timeInHours) {
     return;
   }
 
+  let result = [];
   for (let i = 0; i < (timeInHours / config.slotLength); i++) {
-    console.log(`${config.slotLength}: ${currentWeekPlan.shift()}`);
+    result.push(currentWeekPlan.shift());
+    console.log(currentWeekPlan);
   }
 
-  localStorage.setItem("weekPlan", JSON.stringify(currentWeekPlan));
-}
+  store.set("weekPlan", currentWeekPlan);
+
+  return result;
+};
