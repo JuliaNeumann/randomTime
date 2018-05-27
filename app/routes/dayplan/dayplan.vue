@@ -11,7 +11,7 @@
                                v-model="numSlots">
                     </div>
                     <input type="submit" class="uk-button uk-button-primary uk-margin" value="Get"
-                           @touchstart.prevent="submitDayplan" @click.prevent="submitDayplan">
+                           @click.prevent="submitDayplan">
                 </fieldset>
             </form>
             <h2 class="uk-heading-divider" v-if="tasks.length > 0">Tasks for Today:</h2>
