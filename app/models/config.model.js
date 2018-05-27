@@ -7,7 +7,7 @@ class Config {
         this.root = path.normalize(__dirname + "/..");
         this.rootPath = process.env.ROOT_PATH || "/";
         this.app = {
-            name: "Express-Vue-MVC-Starter",
+            name: "Random Time",
         };
         this.port = Number(process.env.PORT) || 9000;
     }
