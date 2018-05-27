@@ -99,8 +99,11 @@ module.exports.init = (app, config) => {
         };
         req.vueOptions = {
             head: {
-                title: "Error 404",
-            },
+              title: "Error 404",
+              styles: [{
+                src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css"
+              }]
+            }
         };
         res.statusCode = 404;
         res.renderVue("error.vue", data, req.vueOptions);
@@ -122,7 +125,14 @@ module.exports.init = (app, config) => {
             error: error.stack,
         };
         if (res.statusCode) {
-            res.renderVue("error.vue", data);
+          req.vueOptions = {
+            head: {
+              styles: [{
+                src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css"
+              }]
+            }
+          };
+          res.renderVue("error.vue", data, req.vueOptions);
         } else {
             next();
         }

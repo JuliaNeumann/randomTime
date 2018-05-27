@@ -1,6 +1,6 @@
 <template>
-    <div class="error-page">
-        <h1>{{title}}</h1>
+    <div class="error-page uk-container">
+        <h1 class="uk-heading-divider">{{title}}</h1>
         <div v-if="debug">
             <p>Error code: {{errorCode}}</p>
             <p>Traceback:</p>
@@ -9,7 +9,7 @@
             </pre>
         </div>
         <div v-else>
-            <p>The page you're looking for is in another framework</p>
+            <p class="uk-text-lead uk-text-warning">The page you're looking for is in another framework</p>
         </div>
     </div>
 </template>
