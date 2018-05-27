@@ -11,7 +11,8 @@
         "start": "nodemon --inspect=127.0.0.1:9230 app/index.js",
         "preversion": "npm run test",
         "version": "git add .",
-        "postversion": "git push --follow-tags"
+        "postversion": "git push --follow-tags",
+        "postinstall": "npm run build"
     },
     "ava": {
         "files": [
