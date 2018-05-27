@@ -11,7 +11,7 @@
                                v-model="numHours">
                     </div>
                     <input type="submit" class="uk-button uk-button-primary uk-margin" value="Create"
-                           @click.prevent="submitWeekplan">
+                           @touchstart.prevent="submitWeekplan" @click.prevent="submitWeekplan">
                 </fieldset>
             </form>
             <div class="uk-alert-primary" uk-alert v-if="showSuccess">
