@@ -2,4 +2,4 @@ DROP TABLE IF EXISTS weekplans;
 
 BEGIN;
 
-CREATE TABLE weekplan (id INT PRIMARY KEY, author CHAR(50), plan TEXT);
+CREATE TABLE weekplan (id INT PRIMARY KEY, author VARCHAR(50), plan TEXT);
