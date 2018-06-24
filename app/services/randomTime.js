@@ -1,4 +1,4 @@
-const store = require('data-store')('randomtime');
+const updateText = 'UPDATE weekplan SET plan=$2 WHERE author=$1 RETURNING *';
 
 const { Client } = require('pg');
 
@@ -45,17 +45,17 @@ exports.createWeekPlan = async function createWeekPlan(entireTime) {
   shuffleArray(weekSlots);
 
   client.connect();
-  const text = 'UPDATE weekplan SET plan=$2 WHERE author=$1 RETURNING *';
   const values = ['Jule', JSON.stringify(weekSlots)];
 
   try {
-    client.query(text, values);
+    await client.query(updateText, values);
     console.log(`Created weekplan for ${entireTime} hours!`);
-    client.end();
+
   } catch(err) {
     console.log(err.stack);
-    client.end();
   }
+
+  client.end();
 };
 
 function getRandomInt(min, max) {
@@ -69,7 +69,7 @@ function shuffleArray(array) {
   }
 }
 
-exports.getDayPlan = function getDayPlan(numberOfSlots) {
+exports.getDayPlan = async function getDayPlan(numberOfSlots) {
   let currentWeekPlan;
   const query = {
     name: 'fetch-weekplan',
@@ -80,36 +80,37 @@ exports.getDayPlan = function getDayPlan(numberOfSlots) {
   client.connect();
 
   try {
-    const res = client.query(text, values);
-    if (!res.rows[0]) {
+    const res = await client.query(query);
+
+    if (res.rows[0]) {
+      let prevWeekPlan = JSON.parse(res.rows[0].plan);
+      if (prevWeekPlan.length > 0) {
+        currentWeekPlan = prevWeekPlan;
+      }
+    }
+    if (!currentWeekPlan) {
       console.warn("No weekplan set. Create one first by calling createWeekPlan(NUMBER_OF_HOURS_IN_WEEK).");
+      return;
     }
-    else {
-      console.log(res.rows[0]);
+
+    let result = [];
+    for (let i = 0; i < numberOfSlots; i++) {
+      result.push(currentWeekPlan.shift());
     }
+
+    const values = ['Jule', JSON.stringify(currentWeekPlan)];
+
+    try {
+      await client.query(updateText, values);
+    } catch (err) {
+      console.log(err.stack);
+    }
+
     client.end();
+    return result;
+
   } catch(err) {
     console.log(err.stack);
     client.end();
   }
-
-  // if (store.get("weekPlan")) {
-  //   let prevWeekPlan = store.get("weekPlan");
-  //   if (prevWeekPlan.length > 0) {
-  //     currentWeekPlan = prevWeekPlan;
-  //   }
-  // }
-  // if (!currentWeekPlan) {
-  //   console.warn("No weekplan set. Create one first by calling createWeekPlan(NUMBER_OF_HOURS_IN_WEEK).");
-  //   return;
-  // }
-  //
-  // let result = [];
-  // for (let i = 0; i < numberOfSlots; i++) {
-  //   result.push(currentWeekPlan.shift());
-  // }
-  //
-  // store.set("weekPlan", currentWeekPlan);
-  //
-  // return result;
 };

@@ -42,9 +42,9 @@ module.exports = (router) => {
      * @param {object} req
      * @param {object} res
      */
-    (req, res) => {
+    async (req, res) => {
       if (parseInt(req.body.slots) <= 40) {
-        const dayPlan = randomTime.getDayPlan(parseInt(req.body.slots));
+        const dayPlan = await randomTime.getDayPlan(parseInt(req.body.slots));
         if (dayPlan) {
           res.json({
             tasks: dayPlan
