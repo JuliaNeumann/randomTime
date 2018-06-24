@@ -12,3 +12,4 @@ debianpkg/
 .postinst
 geo.mmdb
 .idea/
+db.txt
