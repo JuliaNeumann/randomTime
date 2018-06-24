@@ -7,7 +7,7 @@ const client = new Client({
   host: process.env.POSTGRESQL_SERVICE_HOST,
   database: process.env.POSTGRESQL_DATABASE,
   password: process.env.PGPASSWORD,
-  port: POSTGRESQL_SERVICE_PORT,
+  port: process.env.POSTGRESQL_SERVICE_PORT,
 });
 
 const config = {
@@ -28,7 +28,7 @@ const config = {
   ]
 };
 
-exports.createWeekPlan = function createWeekPlan(entireTime) {
+exports.createWeekPlan = async function createWeekPlan(entireTime) {
   const numberOfSlots = entireTime / config.slotLength;
   const weekSlots = [];
   config.activities.forEach((activity) => {
@@ -48,15 +48,14 @@ exports.createWeekPlan = function createWeekPlan(entireTime) {
   const text = 'UPDATE weekplan SET plan=$2 WHERE author=$1 RETURNING *';
   const values = ['Jule', JSON.stringify(weekSlots)];
 
-  client.query(text, values, (err, res) => {
-    if (err) {
-      console.log(err.stack);
-    } else {
-      console.log(`Created weekplan for ${entireTime} hours!`);
-      console.log(res.rows[0]);
-    }
-    client.end()
-  });
+  try {
+    client.query(text, values);
+    console.log(`Created weekplan for ${entireTime} hours!`);
+    client.end();
+  } catch(err) {
+    console.log(err.stack);
+    client.end();
+  }
 };
 
 function getRandomInt(min, max) {
@@ -78,18 +77,21 @@ exports.getDayPlan = function getDayPlan(numberOfSlots) {
     values: ['Jule']
   };
 
-  client.query(query, (err, res) => {
-    if (err) {
-      console.log(err.stack)
-    } else {
-      if (!res.rows[0]) {
-        console.warn("No weekplan set. Create one first by calling createWeekPlan(NUMBER_OF_HOURS_IN_WEEK).");
-      }
-      else {
-        console.log(res.rows[0]);
-      }
+  client.connect();
+
+  try {
+    const res = client.query(text, values);
+    if (!res.rows[0]) {
+      console.warn("No weekplan set. Create one first by calling createWeekPlan(NUMBER_OF_HOURS_IN_WEEK).");
     }
-  });
+    else {
+      console.log(res.rows[0]);
+    }
+    client.end();
+  } catch(err) {
+    console.log(err.stack);
+    client.end();
+  }
 
   // if (store.get("weekPlan")) {
   //   let prevWeekPlan = store.get("weekPlan");
