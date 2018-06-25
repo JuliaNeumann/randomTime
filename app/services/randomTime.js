@@ -2,12 +2,18 @@ const updateText = 'UPDATE weekplan SET plan=$2 WHERE author=$1 RETURNING *';
 
 const { Client } = require('pg');
 
-const clientConfig = {
-  user: process.env.POSTGRESQL_USER,
-  host: process.env.POSTGRESQL_SERVICE_HOST,
-  database: process.env.POSTGRESQL_DATABASE,
-  password: process.env.PGPASSWORD,
-  port: process.env.POSTGRESQL_SERVICE_PORT,
+const clientConfig = process.env.DATABASE_URL ?
+  { //DB connection on heroku
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+  }
+  :
+  { //DB connection on OpenShift
+    user: process.env.POSTGRESQL_USER,
+    host: process.env.POSTGRESQL_SERVICE_HOST,
+    database: process.env.POSTGRESQL_DATABASE,
+    password: process.env.PGPASSWORD,
+    port: process.env.POSTGRESQL_SERVICE_PORT,
 };
 
 const config = {

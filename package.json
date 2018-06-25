@@ -2,6 +2,10 @@
     "name": "randomTime",
     "version": "1.0.0",
     "private": true,
+    "engines": {
+        "node": "8.6.0",
+        "npm": "5.6.0"
+    }
     "scripts": {
         "test": "npm run lint && NODE_ENV=development nyc ava",
         "lint": "tslint --project tsconfig.json --fix",
