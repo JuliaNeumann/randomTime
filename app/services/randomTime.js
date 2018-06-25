@@ -2,13 +2,13 @@ const updateText = 'UPDATE weekplan SET plan=$2 WHERE author=$1 RETURNING *';
 
 const { Client } = require('pg');
 
-const client = new Client({
+const clientConfig = {
   user: process.env.POSTGRESQL_USER,
   host: process.env.POSTGRESQL_SERVICE_HOST,
   database: process.env.POSTGRESQL_DATABASE,
   password: process.env.PGPASSWORD,
   port: process.env.POSTGRESQL_SERVICE_PORT,
-});
+};
 
 const config = {
   slotLength: 0.5,
@@ -43,6 +43,7 @@ exports.createWeekPlan = async function createWeekPlan(entireTime) {
   }
 
   shuffleArray(weekSlots);
+  const client = new Client(clientConfig);
 
   client.connect();
   const values = ['Jule', JSON.stringify(weekSlots)];
@@ -77,6 +78,7 @@ exports.getDayPlan = async function getDayPlan(numberOfSlots) {
     values: ['Jule']
   };
 
+  const client = new Client(clientConfig);
   client.connect();
 
   try {
@@ -112,5 +114,6 @@ exports.getDayPlan = async function getDayPlan(numberOfSlots) {
   } catch(err) {
     console.log(err.stack);
     client.end();
+    return false;
   }
 };
