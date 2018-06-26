@@ -30,8 +30,11 @@ module.exports.init = (app, config) => {
     const vueOptions = {
         rootPath: path.join(__dirname, "routes"),
         head: {
-            styles: [{ style: "assets/rendered/style.css" }],
-        },
+          styles: [{ style: "assets/rendered/style.css" }],
+          metas: [
+            { name: 'viewport', content: 'width=device-width, initial-scale=1'}
+          ]
+        }
     };
 
     // @ts-ignore
@@ -101,7 +104,10 @@ module.exports.init = (app, config) => {
             head: {
               title: "Error 404",
               styles: [{
-                src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css"
+                src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css",
+                metas: [
+                  { name: 'viewport', content: 'width=device-width, initial-scale=1'}
+                ]
               }]
             }
         };
@@ -128,7 +134,10 @@ module.exports.init = (app, config) => {
           req.vueOptions = {
             head: {
               styles: [{
-                src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css"
+                src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css",
+                metas: [
+                  { name: 'viewport', content: 'width=device-width, initial-scale=1'}
+                ]
               }]
             }
           };
