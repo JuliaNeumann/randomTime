@@ -43,8 +43,8 @@ module.exports = (router) => {
      * @param {object} res
      */
     async (req, res) => {
-      if (parseInt(req.body.slots) <= 40) {
-        const dayPlan = await randomTime.getDayPlan(parseInt(req.body.slots));
+      if (parseInt(req.body.hours) <= 20) {
+        const dayPlan = await randomTime.getDayPlan(parseInt(req.body.hours));
         if (dayPlan) {
           res.json({
             tasks: dayPlan
@@ -57,15 +57,6 @@ module.exports = (router) => {
         return;
       }
       res.send("");
-
-      if (parseInt(req.body.hours) <= 20) {
-        randomTime.createWeekPlan(parseInt(req.body.hours));
-        res.json({
-          message: `Created weekplan for ${req.body.hours} hours!`
-        });
-        return;
-      }
-      res.json({});
     },
   );
 

@@ -5,10 +5,10 @@
             <h1 class="uk-heading-divider">Get Day Plan</h1>
             <form class="uk-form-stacked">
                 <fieldset class="uk-fieldset">
-                    <label class="uk-form-label" for="number-of-slots">Number of slots to plan:</label>
+                    <label class="uk-form-label" for="number-of-hours">Number of hours to plan:</label>
                     <div class="uk-form-controls">
-                        <input class="uk-input uk-form-width-medium" id="number-of-slots" type="number"
-                               v-model="numSlots">
+                        <input class="uk-input uk-form-width-medium" id="number-of-hours" type="number"
+                               v-model="numHours">
                     </div>
                     <input type="submit" class="uk-button uk-button-primary uk-margin" value="Get"
                            @click.prevent="submitDayplan">
@@ -41,7 +41,7 @@
     },
     data() {
       return {
-        numSlots: 0,
+        numHours: 0,
         tasks: [],
         message: '',
         error: ''
@@ -51,7 +51,7 @@
       submitDayplan() {
 
         const postData = {
-            slots: this.numSlots
+            hours: this.numHours
         };
 
         axios

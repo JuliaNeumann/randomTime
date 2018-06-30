@@ -30,6 +30,10 @@ const config = {
     {
       name: "Frei",
       minAmount: 0.25
+    },
+    {
+      name: "Eigene Programmierprojekte",
+      minAmount: 0.25
     }
   ]
 };
@@ -76,7 +80,8 @@ function shuffleArray(array) {
   }
 }
 
-exports.getDayPlan = async function getDayPlan(numberOfSlots) {
+exports.getDayPlan = async function getDayPlan(numberOfHours) {
+  let numberOfSlots = numberOfHours * 2;
   let currentWeekPlan;
   const query = {
     name: 'fetch-weekplan',
