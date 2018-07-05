@@ -13,3 +13,4 @@ debianpkg/
 geo.mmdb
 .idea/
 db.txt
+.env

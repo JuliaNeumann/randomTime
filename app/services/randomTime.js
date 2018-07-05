@@ -5,7 +5,7 @@ const { Client } = require('pg');
 const clientConfig = process.env.DATABASE_URL ?
   { //DB connection on heroku
     connectionString: process.env.DATABASE_URL,
-    ssl: true
+    ssl: process.env.RANDOMTIME_NO_SSL === undefined
   }
   :
   { //DB connection on OpenShift
