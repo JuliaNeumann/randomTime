@@ -44,7 +44,7 @@ module.exports = (router) => {
      */
     async (req, res) => {
       if (parseInt(req.body.hours) <= 20) {
-        const dayPlan = await randomTime.getDayPlan(parseInt(req.body.hours));
+        const dayPlan = await randomTime.getDayPlan(parseFloat(req.body.hours));
         if (dayPlan) {
           res.json({
             tasks: dayPlan

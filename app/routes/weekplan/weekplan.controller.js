@@ -42,7 +42,7 @@ module.exports = (router) => {
      */
     (req, res) => {
       if (parseInt(req.body.hours) <= 20) {
-        randomTime.createWeekPlan(parseInt(req.body.hours));
+        randomTime.createWeekPlan(parseFloat(req.body.hours));
         res.json({
          message: `Created weekplan for ${req.body.hours} hours!`
         });
