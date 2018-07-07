@@ -13,6 +13,7 @@
         "copy": "ncp app dist",
         "sass": "node-sass --output-style compressed app/assets/scss/app.scss app/assets/rendered/style.css",
         "start": "node app/index.js",
+        "dev": "nodemon app/index.js",
         "preversion": "npm run test",
         "version": "git add .",
         "postversion": "git push --follow-tags",

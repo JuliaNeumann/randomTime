@@ -4,11 +4,13 @@ services:
     build: .
     ports:
       - 8090:3000
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm start'
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm run dev'
     depends_on:
       - db
     env_file:
       - .env
+    volumes:
+      - .:/randomTime
 
   db:
     image: postgres
