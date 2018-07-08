@@ -1,5 +1,5 @@
-import { mount } from 'vue-test-utils'
-import Main from '../app/routes/main/main.vue'
+import { mount } from 'vue-test-utils';
+import Main from '../../app/routes/main/main.vue';
 
 describe('Main', () => {
   const wrapper = mount(Main);
