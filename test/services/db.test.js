@@ -13,8 +13,16 @@ describe('db service', () => {
 
   it('can retrieve a weekplan for a specific user', async () => {
     expect(Db.retrieveWeekplan).toBeDefined();
+    await Db.storeWeekplan({name: 'my awesome weekplan'}, 'Jule');
     const result = await Db.retrieveWeekplan('Jule');
     expect(result).toBeDefined();
+    expect(result.name).toEqual('my awesome weekplan');
+  });
+
+  it('can retrieve an empty weekplan when none is set for a specific user', async () => {
+    const result = await Db.retrieveWeekplan('foo');
+    expect(result).toBeDefined();
+    expect(result).toEqual([]);
   });
 
 });

@@ -1,20 +1,4 @@
-const updateText = 'UPDATE weekplan SET plan=$2 WHERE author=$1 RETURNING *';
-
-const { Client } = require('pg');
-
-const clientConfig = process.env.DATABASE_URL ?
-  { //DB connection on heroku
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.RANDOMTIME_NO_SSL === undefined
-  }
-  :
-  { //DB connection on OpenShift
-    user: process.env.POSTGRESQL_USER,
-    host: process.env.POSTGRESQL_SERVICE_HOST,
-    database: process.env.POSTGRESQL_DATABASE,
-    password: process.env.PGPASSWORD,
-    port: process.env.POSTGRESQL_SERVICE_PORT,
-};
+const db = require("./db");
 
 const config = {
   slotLength: 0.5,
@@ -53,20 +37,8 @@ exports.createWeekPlan = async function createWeekPlan(entireTime) {
   }
 
   shuffleArray(weekSlots);
-  const client = new Client(clientConfig);
 
-  client.connect();
-  const values = ['Jule', JSON.stringify(weekSlots)];
-
-  try {
-    await client.query(updateText, values);
-    console.log(`Created weekplan for ${entireTime} hours!`);
-
-  } catch(err) {
-    console.log(err.stack);
-  }
-
-  client.end();
+  await db.storeWeekplan(weekSlots, 'Jule');
 };
 
 function getRandomInt(min, max) {
@@ -82,26 +54,11 @@ function shuffleArray(array) {
 
 exports.getDayPlan = async function getDayPlan(numberOfHours) {
   let numberOfSlots = numberOfHours * 2;
-  let currentWeekPlan;
-  const query = {
-    name: 'fetch-weekplan',
-    text: 'SELECT * FROM weekplan WHERE author = $1',
-    values: ['Jule']
-  };
-
-  const client = new Client(clientConfig);
-  client.connect();
 
   try {
-    const res = await client.query(query);
+    const currentWeekPlan = await db.retrieveWeekplan('Jule');
 
-    if (res.rows[0]) {
-      let prevWeekPlan = JSON.parse(res.rows[0].plan);
-      if (prevWeekPlan.length > 0) {
-        currentWeekPlan = prevWeekPlan;
-      }
-    }
-    if (!currentWeekPlan) {
+    if (!currentWeekPlan.length) {
       console.warn("No weekplan set. Create one first by calling createWeekPlan(NUMBER_OF_HOURS_IN_WEEK).");
       return;
     }
@@ -111,20 +68,13 @@ exports.getDayPlan = async function getDayPlan(numberOfHours) {
       result.push(currentWeekPlan.shift());
     }
 
-    const values = ['Jule', JSON.stringify(currentWeekPlan)];
+    await db.storeWeekplan(currentWeekPlan, 'Jule');
 
-    try {
-      await client.query(updateText, values);
-    } catch (err) {
-      console.log(err.stack);
-    }
-
-    client.end();
     return result;
 
   } catch(err) {
-    console.log(err.stack);
-    client.end();
+
     return false;
+
   }
 };

@@ -46,7 +46,10 @@ exports.retrieveWeekplan = async function retrieveWeekplan(user) {
 
     const res = await client.query(selectText, values);
     client.end();
-    return JSON.parse(res.rows[0].plan);
+    if (res.rows && res.rows.length > 0 && res.rows[0].plan) {
+      return JSON.parse(res.rows[0].plan);
+    }
+    return [];
 
   } catch(err) {
 
