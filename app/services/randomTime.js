@@ -21,6 +21,7 @@ const config = {
     }
   ]
 };
+exports.config = config;
 
 exports.createWeekPlan = async function createWeekPlan(entireTime) {
   const numberOfSlots = entireTime / config.slotLength;
