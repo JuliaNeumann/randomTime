@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Main renders the correct markup 1`] = `
+<div
+  class="uk-container"
+  id="app"
+>
+  <!---->
+   
+  <h1
+    class="uk-heading-divider"
+  >
+    Welcome to Random Time!
+  </h1>
+   
+  <p
+    class="uk-text-lead"
+  >
+    Select from the menu above what you want to do.
+  </p>
+</div>
+`;

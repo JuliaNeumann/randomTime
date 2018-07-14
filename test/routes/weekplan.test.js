@@ -1,8 +1,8 @@
 import { shallow } from 'vue-test-utils';
-import Main from '../../app/routes/main/main.vue';
+import Weekplan from '../../app/routes/weekplan/weekplan.vue';
 
-describe('Main', () => {
-  const wrapper = shallow(Main);
+describe('Weekplan', () => {
+  const wrapper = shallow(Weekplan);
 
   it('renders the correct markup', () => {
     expect(wrapper.element).toMatchSnapshot();

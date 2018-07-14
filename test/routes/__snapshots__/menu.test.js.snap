@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu renders the correct markup 1`] = `
+<div
+  class="uk-margin"
+>
+  <nav
+    class="uk-navbar-container"
+    uk-navbar=""
+  >
+    <div
+      class="uk-navbar-right"
+    >
+      <ul
+        class="uk-navbar-nav"
+      >
+        <li
+          class="uk-active"
+        >
+          <a
+            href="/weekplan"
+          >
+            Create Week Plan
+          </a>
+        </li>
+         
+        <li
+          class=""
+        >
+          <a
+            href="/dayplan"
+          >
+            Get Day Plan
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+`;

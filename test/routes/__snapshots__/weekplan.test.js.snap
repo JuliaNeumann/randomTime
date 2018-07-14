@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Weekplan renders the correct markup 1`] = `
+<div
+  class="uk-container"
+  id="app"
+>
+  <!---->
+   
+  <div>
+    <h1
+      class="uk-heading-divider"
+    >
+      Create Week Plan
+    </h1>
+     
+    <form
+      class="uk-form-stacked"
+    >
+      <fieldset
+        class="uk-fieldset"
+      >
+        <label
+          class="uk-form-label"
+          for="number-of-hours"
+        >
+          Number of hours to plan:
+        </label>
+         
+        <div
+          class="uk-form-controls"
+        >
+          <input
+            class="uk-input uk-form-width-medium"
+            id="number-of-hours"
+            type="number"
+          />
+        </div>
+         
+        <input
+          class="uk-button uk-button-primary uk-margin"
+          type="submit"
+          value="Create"
+        />
+      </fieldset>
+    </form>
+     
+    <!---->
+     
+    <!---->
+  </div>
+</div>
+`;
