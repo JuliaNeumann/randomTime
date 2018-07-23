@@ -27,7 +27,6 @@
 </template>
 
 <script>
-
   import Menu from '../main/menu.vue';
 
   export default {
