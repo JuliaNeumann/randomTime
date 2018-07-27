@@ -1,5 +1,6 @@
-const updateText = 'UPDATE weekplan SET plan=$2 WHERE author=$1 RETURNING *';
-const selectText = 'SELECT * FROM weekplan WHERE author = $1';
+const updatePlanQuery = 'UPDATE weekplan SET plan=$2 WHERE author=$1 RETURNING *';
+const updateConfigQuery = 'UPDATE weekplan SET config=$2 WHERE author=$1 RETURNING *';
+const selectQuery = 'SELECT * FROM weekplan WHERE author = $1';
 
 const { Client } = require('pg');
 
@@ -18,44 +19,58 @@ const clientConfig = process.env.DATABASE_URL ?
   };
 
 exports.storeWeekplan = async function storeWeekplan(plan, user) {
-  const client = new Client(clientConfig);
-
-  client.connect();
-  const values = [user, JSON.stringify(plan)];
-
-  try {
-
-    await client.query(updateText, values);
+  dbConnectionWrap(async (client) => {
+    const values = [user, JSON.stringify(plan)];
+    await client.query(updatePlanQuery, values);
     console.log(`Successfully stored weekplan for user ${user}`);
-
-  } catch(err) {
-
-    console.log(err.stack);
-
-  }
-
-  client.end();
+  });
 };
 
 exports.retrieveWeekplan = async function retrieveWeekplan(user) {
-  const client = new Client(clientConfig);
-  client.connect();
-  const values = [user];
-
-  try {
-
-    const res = await client.query(selectText, values);
+  return dbConnectionWrap(async (client) => {
+    const values = [user];
+    const res = await client.query(selectQuery, values);
     client.end();
     if (res.rows && res.rows.length > 0 && res.rows[0].plan) {
       return JSON.parse(res.rows[0].plan);
     }
     return [];
+  });
+};
+
+exports.storeConfig = async (config, user) => {
+  dbConnectionWrap(async (client) => {
+    const values = [user, JSON.stringify(config)];
+    await client.query(updateConfigQuery, values);
+    console.log(`Successfully stored config for user ${user}`);
+  });
+};
+
+exports.retrieveConfig = async (user) => {
+  return dbConnectionWrap(async (client) => {
+    const values = [user];
+    const res = await client.query(selectQuery, values);
+    if (res.rows && res.rows.length > 0 && res.rows[0].config) {
+      return JSON.parse(res.rows[0].config);
+    }
+    return [];
+  });
+};
+
+const dbConnectionWrap = async (doQuery) => {
+  const client = new Client(clientConfig);
+
+  client.connect();
+
+  try {
+    const result = await doQuery(client);
+    client.end();
+    return result;
 
   } catch(err) {
 
     console.log(err.stack);
     client.end();
     return false;
-
   }
 };

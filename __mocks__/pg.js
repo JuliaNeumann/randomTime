@@ -11,7 +11,8 @@ function Client() {
     if (queryText.startsWith('SELECT')) {
       return {
         rows: [{
-          plan: mockStore[values[0]]
+          plan: mockStore[values[0]],
+          config: mockStore[values[0]]
         }]
       };
     }
