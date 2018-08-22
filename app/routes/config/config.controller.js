@@ -13,7 +13,9 @@ module.exports = (router) => {
      */
     async (req, res) => {
       const data = {};
-      data.config = await Config.getConfig("Jule");
+      const config = await Config.getConfig("Jule");
+      data.slotLength = config.slotLength;
+      data.activities = config.activities || [];
       req.vueOptions.head.title = "Configuration";
       req.vueOptions.head.styles.push({
         src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css",
