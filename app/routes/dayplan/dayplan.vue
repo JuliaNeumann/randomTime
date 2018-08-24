@@ -16,7 +16,7 @@
             </form>
             <h2 class="uk-heading-divider" v-if="tasks.length > 0">Tasks for Today:</h2>
             <ul class="uk-list uk-list-striped" v-if="tasks.length > 0">
-                <li v-for="(task, index) in tasks" :key="index">0.5: {{ task }}</li>
+                <li v-for="(task, index) in tasks" :key="index">{{ slotLength }}h: {{ task }}</li>
             </ul>
             <div class="uk-alert-warning" uk-alert v-if="message">
                 <a class="uk-alert-close" uk-close></a>
@@ -43,7 +43,8 @@
         numHours: 0,
         tasks: [],
         message: '',
-        error: ''
+        error: '',
+        slotLength: 0.5
       };
     },
     methods: {

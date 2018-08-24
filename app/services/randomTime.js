@@ -1,35 +1,16 @@
 const db = require("./db");
-
-const config = {
-  slotLength: 0.5,
-  activities: [
-    {
-      name: "Programmieren Lernen",
-      minAmount: 0.25
-    },
-    {
-      name: "LKG Website",
-      minAmount: 0.25
-    },
-    {
-      name: "Frei",
-      minAmount: 0.25
-    },
-    {
-      name: "Eigene Programmierprojekte",
-      minAmount: 0.25
-    }
-  ]
-};
-exports.config = config;
+const configService = require("./config");
 
 exports.createWeekPlan = async function createWeekPlan(entireTime) {
-  const numberOfSlots = entireTime / config.slotLength;
+  const config = await configService.getConfig('Jule');
+  const numberOfSlots = entireTime / parseFloat(config.slotLength);
   const weekSlots = [];
   config.activities.forEach((activity) => {
-    let minNumberOfSlots = Math.floor(numberOfSlots * activity.minAmount);
-    for (let i = 0; i < minNumberOfSlots; i++) {
-      weekSlots.push(activity.name);
+    if (activity.minAmount && !isNaN(activity.minAmount)) {
+      let minNumberOfSlots = Math.floor(numberOfSlots * parseFloat(activity.minAmount));
+      for (let i = 0; i < minNumberOfSlots; i++) {
+        weekSlots.push(activity.name);
+      }
     }
   });
 
@@ -54,7 +35,8 @@ function shuffleArray(array) {
 }
 
 exports.getDayPlan = async function getDayPlan(numberOfHours) {
-  let numberOfSlots = numberOfHours * 2;
+  const config = await configService.getConfig('Jule');
+  let numberOfSlots = numberOfHours * (1 / parseFloat(config.slotLength));
 
   try {
     const currentWeekPlan = await db.retrieveWeekplan('Jule');

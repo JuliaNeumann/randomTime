@@ -1,5 +1,6 @@
 //@ts-check
 const randomTime = require("../../services/randomTime");
+const Config = require("../../services/config");
 
 /**
  * Main Route Contoller
@@ -12,12 +13,14 @@ module.exports = (router) => {
      * @param {object} req
      * @param {object} res
      */
-    (req, res) => {
+    async (req, res) => {
+      const config = await Config.getConfig("Jule");
       const data = {
         numSlots: 0,
         tasks: [],
         message: '',
-        error: ''
+        error: '',
+        slotLength: config.slotLength
       };
       req.vueOptions.head.title = "Dayplan";
       req.vueOptions.head.styles.push({

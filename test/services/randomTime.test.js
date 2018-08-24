@@ -1,5 +1,6 @@
 import RandomTime from '../../app/services/randomTime.js';
 import db from '../../app/services/db.js';
+import configService from '../../app/services/config.js';
 
 
 describe('randomTime service', () => {
@@ -10,14 +11,43 @@ describe('randomTime service', () => {
 
   it('creates a weekplan with the correct number of slots & activities', async () => {
       db.storeWeekplan = jest.fn();
-      RandomTime.createWeekPlan(5);
+      configService.getConfig = jest.fn();
+      const mockConfig = {
+        slotLength: '0.5',
+        activities: [
+          {
+            name: "Programmieren Lernen",
+            minAmount: '0.25'
+          },
+          {
+            name: "LKG Website",
+            minAmount: '0.25'
+          },
+          {
+            name: "Frei",
+            minAmount: '0.25'
+          },
+          {
+            name: "Eigene Programmierprojekte",
+            minAmount: '0.25'
+          },
+          {
+            name: "Nichts"
+          }
+        ]
+      };
+      configService.getConfig.mockReturnValueOnce(mockConfig);
+
+      await RandomTime.createWeekPlan(5);
       expect(db.storeWeekplan).toHaveBeenCalled();
 
       const plan = db.storeWeekplan.mock.calls[0][0];
       expect(plan.length).toEqual(10);
 
-      RandomTime.config.activities.forEach((activity) => {
-        expect(countInArray(plan, activity.name)).toBeGreaterThanOrEqual(2);
+      mockConfig.activities.forEach((activity, index) => {
+        if (index < 4) {
+          expect(countInArray(plan, activity.name)).toBeGreaterThanOrEqual(2);
+        }
       });
   });
 

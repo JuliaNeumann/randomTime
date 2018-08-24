@@ -33,6 +33,16 @@ exports[`Menu renders the correct markup 1`] = `
             Get Day Plan
           </a>
         </li>
+         
+        <li
+          class=""
+        >
+          <a
+            href="/config"
+          >
+            Configuration
+          </a>
+        </li>
       </ul>
     </div>
   </nav>
