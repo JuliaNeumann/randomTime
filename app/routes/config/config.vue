@@ -12,10 +12,11 @@
             </fieldset>
             <fieldset class="uk-fieldset uk-margin-large">
                 <h4>List of Tasks:</h4>
+                Add as many activities as you like. Optionally, provide a weight as a fraction of 1 (e.g. 0.5 if you want the activity to fill up approximately 50% of your time slots).
                 <section v-for="(activity, index) in activities" class="uk-margin-small">
                     <input class="uk-input uk-form-width-medium" type="text" placeholder="Name your activity"
                            v-model="activity.name">
-                    <input class="uk-input uk-form-width-medium" type="number" placeholder="Optional: Time in %"
+                    <input class="uk-input uk-form-width-medium" type="number" placeholder="Optional: Weight"
                            v-model="activity.minAmount">
                     <button class="uk-button uk-button-danger uk-button-small"
                             @click.prevent="deleteActivity(index)" title="Delete Activity">
@@ -69,20 +70,43 @@
       deleteActivity(index) {
         this.activities.splice(index, 1);
       },
+      checkNames() {
+        const allActivitiesHaveName = this.activities.every((activity) => {
+            return !!activity.name;
+        });
+        if (!allActivitiesHaveName) {
+          this.error = 'You must provide a name for each activity!';
+        }
+        return allActivitiesHaveName;
+      },
+      checkTimes() {
+        const sumActivities = this.activities.reduce(((total, activity) => {
+          if (activity.minAmount && !isNaN(activity.minAmount)) {
+            return total + parseFloat(activity.minAmount);
+          }
+          return total;
+        }), 0);
+        if (sumActivities > 1) {
+          this.error = 'The amounts of all your activities\' weigths together must not be more than 1!';
+          return false;
+        }
+        return true;
+      },
       submitConfig() {
-        //TODO: check that each activity has at least a name
-        //TODO: add check for amounts not more than 100% together
-        axios
-          .post('/config', {
-            slotLength: this.slotLength,
-            activities: this.activities
-          })
-          .then(result => {
-            this.showSuccess = true;
-          })
-          .catch(error => {
-            this.error = error.data;
-          })
+        this.error = '';
+        if (this.checkNames() && this.checkTimes()) {
+          axios
+            .post('/config', {
+              slotLength: this.slotLength,
+              activities: this.activities
+            })
+            .then(result => {
+              this.showSuccess = true;
+            })
+            .catch(error => {
+              this.error = error.data;
+            })
+        }
       }
     }
   };
