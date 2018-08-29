@@ -1,8 +1,8 @@
 const db = require("./db");
 const configService = require("./config");
 
-exports.createWeekPlan = async function createWeekPlan(entireTime) {
-  const config = await configService.getConfig('Jule');
+exports.createWeekPlan = async function createWeekPlan(entireTime, user) {
+  const config = await configService.getConfig(user);
   const numberOfSlots = entireTime / parseFloat(config.slotLength);
   const weekSlots = [];
   config.activities.forEach((activity) => {
@@ -20,7 +20,7 @@ exports.createWeekPlan = async function createWeekPlan(entireTime) {
 
   shuffleArray(weekSlots);
 
-  await db.storeWeekplan(weekSlots, 'Jule');
+  await db.storeWeekplan(weekSlots, user);
 };
 
 function getRandomInt(min, max) {
@@ -34,12 +34,12 @@ function shuffleArray(array) {
   }
 }
 
-exports.getDayPlan = async function getDayPlan(numberOfHours) {
-  const config = await configService.getConfig('Jule');
+exports.getDayPlan = async function getDayPlan(numberOfHours, user) {
+  const config = await configService.getConfig(user);
   let numberOfSlots = numberOfHours * (1 / parseFloat(config.slotLength));
 
   try {
-    const currentWeekPlan = await db.retrieveWeekplan('Jule');
+    const currentWeekPlan = await db.retrieveWeekplan(user);
 
     if (!currentWeekPlan.length) {
       console.warn("No weekplan set. Create one first by calling createWeekPlan(NUMBER_OF_HOURS_IN_WEEK).");
@@ -51,7 +51,7 @@ exports.getDayPlan = async function getDayPlan(numberOfHours) {
       result.push(currentWeekPlan.shift());
     }
 
-    await db.storeWeekplan(currentWeekPlan, 'Jule');
+    await db.storeWeekplan(currentWeekPlan, user);
 
     return result;
 

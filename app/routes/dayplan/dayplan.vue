@@ -10,6 +10,11 @@
                         <input class="uk-input uk-form-width-medium" id="number-of-hours" type="number"
                                v-model="numHours">
                     </div>
+                    <label class="uk-form-label uk-margin" for="user">User:</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input uk-form-width-medium" id="user" type="text"
+                               v-model="user">
+                    </div>
                     <input type="submit" class="uk-button uk-button-primary uk-margin" value="Get"
                            @click.prevent="submitDayplan">
                 </fieldset>
@@ -32,9 +37,11 @@
 
 <script>
   import Menu from '../main/menu.vue';
+  import {userMixin} from '../../mixins/user';
 
   export default {
     name: 'DayPlan',
+    mixins: [userMixin],
     components: {
       Menu,
     },
@@ -44,14 +51,16 @@
         tasks: [],
         message: '',
         error: '',
-        slotLength: 0.5
+        slotLength: 0.5,
+        user: ''
       };
     },
     methods: {
       submitDayplan() {
 
         const postData = {
-            hours: this.numHours
+            hours: this.numHours,
+            user: this.user
         };
 
         axios

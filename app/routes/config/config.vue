@@ -28,6 +28,11 @@
                     <span uk-icon="plus" class="uk-margin-small-right"></span>Add new activity
                 </button>
             </fieldset>
+            <label class="uk-form-label uk-margin" for="user">User:</label>
+            <div class="uk-form-controls">
+                <input class="uk-input uk-form-width-medium" id="user" type="text"
+                       v-model="user">
+            </div>
             <fieldset class="uk-fieldset uk-margin-large">
                 <input type="submit" class="uk-button uk-button-primary uk-margin" value="Submit"
                        @click.prevent="submitConfig">
@@ -46,9 +51,11 @@
 
 <script>
   import Menu from '../main/menu.vue';
+  import {userMixin} from '../../mixins/user';
 
   export default {
     name: 'Config',
+    mixins: [userMixin],
     components: {
       Menu,
     },
@@ -98,7 +105,8 @@
           axios
             .post('/config', {
               slotLength: this.slotLength,
-              activities: this.activities
+              activities: this.activities,
+              user: this.user
             })
             .then(result => {
               this.showSuccess = true;

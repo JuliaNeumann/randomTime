@@ -13,6 +13,7 @@ module.exports = (router) => {
      */
     async (req, res) => {
       const data = {};
+      // TODO: user independence
       const config = await Config.getConfig("Jule");
       data.slotLength = config.slotLength;
       data.activities = config.activities || [];
@@ -40,10 +41,13 @@ module.exports = (router) => {
      * @param {object} res
      */
     async (req, res) => {
-      Config.setConfig("Jule", parseFloat(req.body.slotLength), req.body.activities);
-      res.json({
-        message: `Set Config!`
-      });
+      if (req.body.user) {
+        Config.setConfig(req.body.user, parseFloat(req.body.slotLength), req.body.activities);
+        res.json({
+          message: `Set Config!`
+        });
+      }
+      res.json({})
     },
   );
 

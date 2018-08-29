@@ -14,6 +14,7 @@ module.exports = (router) => {
      * @param {object} res
      */
     async (req, res) => {
+      // TODO: user independence
       const config = await Config.getConfig("Jule");
       const data = {
         numSlots: 0,
@@ -46,8 +47,8 @@ module.exports = (router) => {
      * @param {object} res
      */
     async (req, res) => {
-      if (parseInt(req.body.hours) <= 20) {
-        const dayPlan = await randomTime.getDayPlan(parseFloat(req.body.hours));
+      if (parseInt(req.body.hours) <= 20 && req.body.user) {
+        const dayPlan = await randomTime.getDayPlan(parseFloat(req.body.hours), req.body.user);
         if (dayPlan) {
           res.json({
             tasks: dayPlan

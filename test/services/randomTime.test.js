@@ -9,37 +9,39 @@ describe('randomTime service', () => {
     return array.filter(item => item == what).length;
   }
 
+  const mockConfig = {
+    slotLength: '0.5',
+    activities: [
+      {
+        name: "Programmieren Lernen",
+        minAmount: '0.25'
+      },
+      {
+        name: "LKG Website",
+        minAmount: '0.25'
+      },
+      {
+        name: "Frei",
+        minAmount: '0.25'
+      },
+      {
+        name: "Eigene Programmierprojekte",
+        minAmount: '0.25'
+      },
+      {
+        name: "Nichts"
+      }
+    ]
+  };
+
   it('creates a weekplan with the correct number of slots & activities', async () => {
       db.storeWeekplan = jest.fn();
       configService.getConfig = jest.fn();
-      const mockConfig = {
-        slotLength: '0.5',
-        activities: [
-          {
-            name: "Programmieren Lernen",
-            minAmount: '0.25'
-          },
-          {
-            name: "LKG Website",
-            minAmount: '0.25'
-          },
-          {
-            name: "Frei",
-            minAmount: '0.25'
-          },
-          {
-            name: "Eigene Programmierprojekte",
-            minAmount: '0.25'
-          },
-          {
-            name: "Nichts"
-          }
-        ]
-      };
       configService.getConfig.mockReturnValueOnce(mockConfig);
 
-      await RandomTime.createWeekPlan(5);
+      await RandomTime.createWeekPlan(5, 'Jule');
       expect(db.storeWeekplan).toHaveBeenCalled();
+      expect(db.storeWeekplan.mock.calls[0][1]).toBe('Jule');
 
       const plan = db.storeWeekplan.mock.calls[0][0];
       expect(plan.length).toEqual(10);
@@ -54,11 +56,13 @@ describe('randomTime service', () => {
   it('retrieves a dayplan with the correct number of slots and updates weekplan', async () => {
     db.storeWeekplan = jest.fn();
     db.retrieveWeekplan = jest.fn();
+    configService.getConfig = jest.fn();
+    configService.getConfig.mockReturnValueOnce(mockConfig);
 
     db.retrieveWeekplan.mockReturnValueOnce(['a', 'b', 'c', 'd']);
-    const result = await RandomTime.getDayPlan(1);
+    const result = await RandomTime.getDayPlan(1, 'Jul');
 
-    expect(db.retrieveWeekplan).toHaveBeenCalledWith('Jule');
+    expect(db.retrieveWeekplan).toHaveBeenCalledWith('Jul');
     expect(result).toEqual(['a', 'b']);
 
     expect(db.storeWeekplan).toBeCalled();
@@ -69,6 +73,8 @@ describe('randomTime service', () => {
   it('warns if trying to retrieve a dayplan and no weekplan is set, does not set new one', async () => {
     db.storeWeekplan = jest.fn();
     db.retrieveWeekplan = jest.fn();
+    configService.getConfig = jest.fn();
+    configService.getConfig.mockReturnValueOnce(mockConfig);
     jest.spyOn(global.console, 'warn');
 
     db.retrieveWeekplan.mockReturnValueOnce([]);

@@ -27,8 +27,8 @@ describe('Dayplan', () => {
     const tasks = wrapper.findAll('li');
 
     expect(tasks.length).toBe(2);
-    expect(tasks.at(0).text()).toBe('0.5: a');
-    expect(tasks.at(1).text()).toBe('0.5: b');
+    expect(tasks.at(0).text()).toBe('0.5h: a');
+    expect(tasks.at(1).text()).toBe('0.5h: b');
   });
 
   it('triggers request for dayplan on click and displays message if there is no plan', () => {

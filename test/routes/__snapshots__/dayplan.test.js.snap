@@ -37,6 +37,23 @@ exports[`Dayplan renders the correct markup 1`] = `
           />
         </div>
          
+        <label
+          class="uk-form-label uk-margin"
+          for="user"
+        >
+          User:
+        </label>
+         
+        <div
+          class="uk-form-controls"
+        >
+          <input
+            class="uk-input uk-form-width-medium"
+            id="user"
+            type="text"
+          />
+        </div>
+         
         <input
           class="uk-button uk-button-primary uk-margin"
           type="submit"

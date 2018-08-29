@@ -41,8 +41,8 @@ module.exports = (router) => {
      * @param {object} res
      */
     (req, res) => {
-      if (parseInt(req.body.hours) <= 20) {
-        randomTime.createWeekPlan(parseFloat(req.body.hours));
+      if (parseInt(req.body.hours) <= 20 && req.body.user) {
+        randomTime.createWeekPlan(parseFloat(req.body.hours), req.body.user);
         res.json({
          message: `Created weekplan for ${req.body.hours} hours!`
         });
