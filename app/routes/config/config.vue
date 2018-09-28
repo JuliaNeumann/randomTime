@@ -23,10 +23,12 @@
                         <span uk-icon="trash"></span>
                     </button>
                 </section>
-                <button class="uk-button uk-button-default uk-margin"
-                        @click.prevent="addActivity">
-                    <span uk-icon="plus" class="uk-margin-small-right"></span>Add new activity
-                </button>
+                <section class="uk-margin">
+                    <button class="uk-button uk-button-default"
+                            @click.prevent="addActivity">
+                        <span uk-icon="plus" class="uk-margin-small-right"></span>Add new activity
+                    </button>
+                </section>
             </fieldset>
             <label class="uk-form-label uk-margin" for="user">User:</label>
             <div class="uk-form-controls">
@@ -34,18 +36,18 @@
                        v-model="user">
             </div>
             <fieldset class="uk-fieldset uk-margin-large">
+                <div class="uk-alert-primary" uk-alert v-if="showSuccess">
+                    <a class="uk-alert-close" uk-close></a>
+                    <p>Successfully created config!</p>
+                </div>
+                <div class="uk-alert-danger" uk-alert v-if="error">
+                    <a class="uk-alert-close" uk-close></a>
+                    <p>{{ error }}</p>
+                </div>
                 <input type="submit" class="uk-button uk-button-primary uk-margin" value="Submit"
                        @click.prevent="submitConfig">
             </fieldset>
         </form>
-        <div class="uk-alert-primary" uk-alert v-if="showSuccess">
-            <a class="uk-alert-close" uk-close></a>
-            <p>Successfully created config!</p>
-        </div>
-        <div class="uk-alert-danger" uk-alert v-if="error">
-            <a class="uk-alert-close" uk-close></a>
-            <p>{{ error }}</p>
-        </div>
     </div>
 </template>
 
@@ -65,6 +67,16 @@
         activities: [],
         showSuccess: false,
         error: ''
+      }
+    },
+    mounted() {
+      if (this.user) {
+        axios
+          .get('/getConfigForUser', { params: { user: this.user }})
+          .then(response => {
+            this.slotLength = response.data.slotLength || 0.5;
+            this.activities = response.data.activities || [];
+          })
       }
     },
     methods: {

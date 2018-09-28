@@ -14,15 +14,6 @@ module.exports = (router) => {
      * @param {object} res
      */
     async (req, res) => {
-      // TODO: user independence
-      const config = await Config.getConfig("Jule");
-      const data = {
-        numSlots: 0,
-        tasks: [],
-        message: '',
-        error: '',
-        slotLength: config.slotLength
-      };
       req.vueOptions.head.title = "Dayplan";
       req.vueOptions.head.styles.push({
         src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css",
@@ -37,7 +28,7 @@ module.exports = (router) => {
         src: "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/js/uikit-icons.min.js",
       });
 
-      res.renderVue("dayplan/dayplan.vue", data, req.vueOptions);
+      res.renderVue("dayplan/dayplan.vue", {}, req.vueOptions);
     },
   );
 
@@ -49,9 +40,11 @@ module.exports = (router) => {
     async (req, res) => {
       if (parseInt(req.body.hours) <= 20 && req.body.user) {
         const dayPlan = await randomTime.getDayPlan(parseFloat(req.body.hours), req.body.user);
+        const config = await Config.getConfig(req.body.user);
         if (dayPlan) {
           res.json({
-            tasks: dayPlan
+            tasks: dayPlan,
+            slotLength: config.slotLength
           });
           return;
         }

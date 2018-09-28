@@ -71,6 +71,7 @@
               this.tasks = [];
             } else {
               this.tasks = response.data.tasks;
+              this.slotLength = response.data.slotLength || this.slotLength;
               this.message = '';
             }
           })

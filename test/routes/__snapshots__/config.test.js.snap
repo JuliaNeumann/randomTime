@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Config renders the correct markup 1`] = `
+<div
+  class="uk-container"
+  id="app"
+>
+  <!---->
+   
+  <h1
+    class="uk-heading-divider"
+  >
+    Edit your configuration
+  </h1>
+   
+  <form
+    class="uk-form-stacked"
+  >
+    <fieldset
+      class="uk-fieldset uk-margin-large"
+    >
+      <label
+        class="uk-form-label"
+        for="slot-length"
+      >
+        Length of your slots (in hours):
+      </label>
+       
+      <div
+        class="uk-form-controls"
+      >
+        <input
+          class="uk-input uk-form-width-medium"
+          id="slot-length"
+          type="number"
+        />
+      </div>
+    </fieldset>
+     
+    <fieldset
+      class="uk-fieldset uk-margin-large"
+    >
+      <h4>
+        List of Tasks:
+      </h4>
+      
+            Add as many activities as you like. Optionally, provide a weight as a fraction of 1 (e.g. 0.5 if you want the activity to fill up approximately 50% of your time slots).
+             
+      <section
+        class="uk-margin"
+      >
+        <button
+          class="uk-button uk-button-default"
+        >
+          <span
+            class="uk-margin-small-right"
+            uk-icon="plus"
+          />
+          Add new activity
+                
+        </button>
+      </section>
+    </fieldset>
+     
+    <label
+      class="uk-form-label uk-margin"
+      for="user"
+    >
+      User:
+    </label>
+     
+    <div
+      class="uk-form-controls"
+    >
+      <input
+        class="uk-input uk-form-width-medium"
+        id="user"
+        type="text"
+      />
+    </div>
+     
+    <fieldset
+      class="uk-fieldset uk-margin-large"
+    >
+      <!---->
+       
+      <!---->
+       
+      <input
+        class="uk-button uk-button-primary uk-margin"
+        type="submit"
+        value="Submit"
+      />
+    </fieldset>
+  </form>
+</div>
+`;

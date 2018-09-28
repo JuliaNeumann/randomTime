@@ -2,3 +2,5 @@
 
 CREATE TABLE weekplan (id INT PRIMARY KEY, author VARCHAR(50), plan TEXT, config TEXT, password VARCHAR(50));
 INSERT INTO weekplan (id, author) VALUES (1, 'Jule');
+INSERT INTO weekplan (id, author) VALUES (2, 'Jonas');
+INSERT INTO weekplan (id, author) VALUES (3, 'Anne');
