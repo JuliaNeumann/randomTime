@@ -40,7 +40,7 @@ exports[`Menu renders the correct markup 1`] = `
           <a
             href="/config"
           >
-            Configuration
+            Config
           </a>
         </li>
       </ul>

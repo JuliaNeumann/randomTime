@@ -36,15 +36,15 @@
                        v-model="user">
             </div>
             <fieldset class="uk-fieldset uk-margin-large">
+                <spinner v-if="loading"></spinner>
+                <div class="uk-alert-primary" uk-alert v-if="showSuccess">
+                    <p>Successfully created config!</p>
+                </div>
+                <alerts :message="message" :error="error"></alerts>
                 <input type="submit" class="uk-button uk-button-primary uk-margin" value="Submit"
                        @click.prevent="submitConfig">
             </fieldset>
         </form>
-        <spinner v-if="loading"></spinner>
-        <div class="uk-alert-primary" uk-alert v-if="showSuccess">
-            <p>Successfully created config!</p>
-        </div>
-        <alerts :message="message" :error="error"></alerts>
     </div>
 </template>
 
@@ -144,3 +144,9 @@
     }
   };
 </script>
+
+<style scoped>
+    .uk-form-width-medium {
+        width: 250px;
+    }
+</style>
