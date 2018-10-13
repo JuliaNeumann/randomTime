@@ -36,25 +36,22 @@
                        v-model="user">
             </div>
             <fieldset class="uk-fieldset uk-margin-large">
-                <div class="uk-alert-primary" uk-alert v-if="showSuccess">
-                    <a class="uk-alert-close" uk-close></a>
-                    <p>Successfully created config!</p>
-                </div>
-                <div class="uk-alert-danger" uk-alert v-if="error">
-                    <a class="uk-alert-close" uk-close></a>
-                    <p>{{ error }}</p>
-                </div>
                 <input type="submit" class="uk-button uk-button-primary uk-margin" value="Submit"
                        @click.prevent="submitConfig">
             </fieldset>
         </form>
         <spinner v-if="loading"></spinner>
+        <div class="uk-alert-primary" uk-alert v-if="showSuccess">
+            <p>Successfully created config!</p>
+        </div>
+        <alerts :message="message" :error="error"></alerts>
     </div>
 </template>
 
 <script>
   import Menu from '../main/menu.vue';
   import Spinner from '../main/spinner.vue';
+  import Alerts from '../main/alerts.vue';
   import {userMixin} from '../../mixins/user';
 
   export default {
@@ -62,7 +59,8 @@
     mixins: [userMixin],
     components: {
       Menu,
-      Spinner
+      Spinner,
+      Alerts
     },
     data() {
       return {
@@ -70,6 +68,7 @@
         activities: [],
         showSuccess: false,
         error: '',
+        message: '',
         loading: false
       }
     },
@@ -118,6 +117,9 @@
       submitConfig() {
         this.loading = true;
         this.error = '';
+        this.showSuccess = false;
+        this.message = '';
+
         if (this.checkNames() && this.checkTimes()) {
           axios
             .post('/config', {
@@ -125,9 +127,14 @@
               activities: this.activities,
               user: this.user
             })
-            .then(result => {
+            .then(response => {
               this.loading = false;
-              this.showSuccess = true;
+
+              if (typeof response.data.message === 'string') {
+                this.message = response.data.message;
+              } else if (response.data.success) {
+                this.showSuccess = true;
+              }
             })
             .catch(error => {
               this.error = error.data;

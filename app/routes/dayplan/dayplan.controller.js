@@ -38,9 +38,21 @@ module.exports = (router) => {
      * @param {object} res
      */
     async (req, res) => {
-      if (parseInt(req.body.hours) <= 20 && req.body.user) {
+      if (parseInt(req.body.hours) <= 100 && req.body.user) {
+        if (!parseInt(req.body.hours) > 0) {
+          res.json({
+            message: 'Provide a valid number of hours to get a dayplan.'
+          });
+          return;
+        }
         const dayPlan = await randomTime.getDayPlan(parseFloat(req.body.hours), req.body.user);
         const config = await Config.getConfig(req.body.user);
+        if (!config) {
+          res.json({
+            message: 'No valid config found for this user name.'
+          });
+          return;
+        }
         if (dayPlan) {
           res.json({
             tasks: dayPlan,
@@ -49,11 +61,13 @@ module.exports = (router) => {
           return;
         }
         res.json({
-          message: 'No weekplan set.'
+          message: 'No weekplan set for this user name.'
         });
         return;
       }
-      res.send("");
+      res.json({
+        message: 'Invalid request: No user name or number of hours too high (max = 100).'
+      });
     },
   );
 

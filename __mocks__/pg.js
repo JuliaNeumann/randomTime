@@ -6,7 +6,12 @@ function Client() {
   this.query = function(queryText, values) {
     if (queryText.startsWith('UPDATE')) {
       mockStore[values[0]] = values[1]; // map of user => plan
-      return "updated";
+      return {
+        rows: [{
+          plan: mockStore[values[0]],
+          config: mockStore[values[0]]
+        }]
+      };
     }
     if (queryText.startsWith('SELECT')) {
       return {

@@ -37,14 +37,21 @@ module.exports = (router) => {
      * @param {object} res
      */
     async (req, res) => {
-      if (req.body.user) {
-        Config.setConfig(req.body.user, parseFloat(req.body.slotLength), req.body.activities);
+      if (req.body.user && req.body.slotLength && req.body.activities && req.body.activities.length > 0) {
+        const errorMsg = await Config.setConfig(req.body.user, parseFloat(req.body.slotLength), req.body.activities);
+        if (errorMsg) {
+          res.json({
+            message: errorMsg
+          });
+        }
         res.json({
-          message: `Set Config!`
+          success: true
         });
         return;
       }
-      res.json({});
+      res.json({
+        message: 'Invalid request: No user name, slotLength or activities defined!'
+      });
     },
   );
 

@@ -1,11 +1,12 @@
-import { shallow } from 'vue-test-utils';
+import { mount, shallow } from 'vue-test-utils';
 import Dayplan from '../../app/routes/dayplan/dayplan.vue';
 
 describe('Dayplan', () => {
-  const wrapper = shallow(Dayplan);
+  const wrapper = mount(Dayplan);
 
   it('renders the correct markup', () => {
-    expect(wrapper.element).toMatchSnapshot();
+    const shallowComp = shallow(Dayplan);
+    expect(shallowComp.element).toMatchSnapshot();
   });
 
   it('triggers request for dayplan on click and displays it', () => {
@@ -24,7 +25,7 @@ describe('Dayplan', () => {
     };
 
     wrapper.find('input[type="submit"]').trigger('click');
-    const tasks = wrapper.findAll('li');
+    const tasks = wrapper.findAll('.task');
 
     expect(tasks.length).toBe(2);
     expect(tasks.at(0).text()).toBe('0.5h: a');
@@ -48,7 +49,7 @@ describe('Dayplan', () => {
 
     wrapper.find('input[type="submit"]').trigger('click');
 
-    const tasks = wrapper.findAll('li');
+    const tasks = wrapper.findAll('.task');
     expect(tasks.length).toBe(0);
 
     const msg = wrapper.find('.uk-alert-warning');
@@ -72,7 +73,7 @@ describe('Dayplan', () => {
 
     wrapper.find('input[type="submit"]').trigger('click');
 
-    const tasks = wrapper.findAll('li');
+    const tasks = wrapper.findAll('.task');
     expect(tasks.length).toBe(0);
 
     const msg = wrapper.find('.uk-alert-danger');

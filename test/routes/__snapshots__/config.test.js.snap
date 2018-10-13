@@ -82,10 +82,6 @@ exports[`Config renders the correct markup 1`] = `
     <fieldset
       class="uk-fieldset uk-margin-large"
     >
-      <!---->
-       
-      <!---->
-       
       <input
         class="uk-button uk-button-primary uk-margin"
         type="submit"
@@ -93,6 +89,10 @@ exports[`Config renders the correct markup 1`] = `
       />
     </fieldset>
   </form>
+   
+  <!---->
+   
+  <!---->
    
   <!---->
 </div>

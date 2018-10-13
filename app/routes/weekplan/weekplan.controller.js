@@ -40,15 +40,23 @@ module.exports = (router) => {
      * @param {object} req
      * @param {object} res
      */
-    (req, res) => {
-      if (parseInt(req.body.hours) <= 20 && req.body.user) {
-        randomTime.createWeekPlan(parseFloat(req.body.hours), req.body.user);
+    async (req, res) => {
+      if (parseInt(req.body.hours) <= 100 && req.body.user) {
+        const errorMsg = await randomTime.createWeekPlan(parseFloat(req.body.hours), req.body.user);
+        if (errorMsg) {
+          res.json({
+            message: errorMsg
+          });
+          return;
+        }
         res.json({
-         message: `Created weekplan for ${req.body.hours} hours!`
+         success: true
         });
         return;
       }
-      res.json({});
+      res.json({
+        message: 'Invalid request: No user name or number of hours too high (max = 100).'
+      });
     },
   );
 

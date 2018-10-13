@@ -21,13 +21,9 @@
             </form>
             <spinner v-if="loading"></spinner>
             <div class="uk-alert-primary" uk-alert v-if="showSuccess">
-                <a class="uk-alert-close" uk-close></a>
                 <p>Created week plan for {{ numHours }} hours!</p>
             </div>
-            <div class="uk-alert-danger" uk-alert v-if="error">
-                <a class="uk-alert-close" uk-close></a>
-                <p>{{ error }}</p>
-            </div>
+            <alerts :message="message" :error="error"></alerts>
         </div>
     </div>
 </template>
@@ -35,6 +31,7 @@
 <script>
   import Menu from '../main/menu.vue';
   import Spinner from '../main/spinner.vue';
+  import Alerts from '../main/alerts.vue';
   import {userMixin} from '../../mixins/user';
 
   export default {
@@ -42,19 +39,25 @@
     mixins: [userMixin],
     components: {
       Menu,
-      Spinner
+      Spinner,
+      Alerts
     },
     data() {
       return {
         numHours: 0,
         showSuccess: false,
         error: '',
+        message: '',
         loading: false
       };
     },
     methods: {
       submitWeekplan() {
         this.loading = true;
+        this.error = '';
+        this.message = '';
+        this.showSuccess = false;
+
         const postData = {
           hours: this.numHours,
           user: this.user
@@ -62,9 +65,14 @@
 
         axios
           .post('/weekplan', postData)
-          .then(result => {
+          .then(response => {
             this.loading = false;
-            this.showSuccess = true;
+
+            if (typeof response.data.message === 'string') {
+              this.message = response.data.message;
+            } else if (response.data.success) {
+              this.showSuccess = true;
+            }
           })
           .catch(error => {
             this.error = error.data;

@@ -1,11 +1,12 @@
-import { shallow } from 'vue-test-utils';
+import { shallow, mount } from 'vue-test-utils';
 import Weekplan from '../../app/routes/weekplan/weekplan.vue';
 
 describe('Weekplan', () => {
-  const wrapper = shallow(Weekplan);
+  const wrapper = mount(Weekplan);
 
   it('renders the correct markup', () => {
-    expect(wrapper.element).toMatchSnapshot();
+    const shallowComp = shallow(Weekplan);
+    expect(shallowComp.element).toMatchSnapshot();
   });
 
   it('triggers request for setting a weekplan on click and displays success message', () => {
@@ -13,7 +14,11 @@ describe('Weekplan', () => {
     axios.post = () => {
       return {
         then: (callback) => {
-          callback();
+          callback({
+            data: {
+              success: true
+            }
+          });
           return {
             catch: () => {
               return true;

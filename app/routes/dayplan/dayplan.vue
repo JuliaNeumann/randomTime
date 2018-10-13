@@ -22,16 +22,9 @@
             <spinner v-if="loading"></spinner>
             <h2 class="uk-heading-divider" v-if="tasks.length > 0">Tasks for Today:</h2>
             <ul class="uk-list uk-list-striped" v-if="tasks.length > 0">
-                <li v-for="(task, index) in tasks" :key="index">{{ slotLength }}h: {{ task }}</li>
+                <li class="task" v-for="(task, index) in tasks" :key="index">{{ slotLength }}h: {{ task }}</li>
             </ul>
-            <div class="uk-alert-warning" uk-alert v-if="message">
-                <a class="uk-alert-close" uk-close></a>
-                <p>{{ message }}</p>
-            </div>
-            <div class="uk-alert-danger" uk-alert v-if="error">
-                <a class="uk-alert-close" uk-close></a>
-                <p>{{ error }}</p>
-            </div>
+            <alerts :message="message" :error="error"></alerts>
         </div>
     </div>
 </template>
@@ -39,6 +32,7 @@
 <script>
   import Menu from '../main/menu.vue';
   import Spinner from '../main/spinner.vue';
+  import Alerts from '../main/alerts.vue';
   import {userMixin} from '../../mixins/user';
 
   export default {
@@ -46,6 +40,8 @@
     mixins: [userMixin],
     components: {
       Menu,
+      Spinner,
+      Alerts
     },
     data() {
       return {
@@ -61,6 +57,9 @@
     methods: {
       submitDayplan() {
         this.loading = true;
+        this.error = '';
+        this.message = '';
+
         const postData = {
             hours: this.numHours,
             user: this.user
@@ -76,7 +75,6 @@
             } else {
               this.tasks = response.data.tasks;
               this.slotLength = response.data.slotLength || this.slotLength;
-              this.message = '';
             }
           })
           .catch(error => {

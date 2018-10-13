@@ -19,10 +19,16 @@ const clientConfig = process.env.DATABASE_URL ?
   };
 
 exports.storeWeekplan = async function storeWeekplan(plan, user) {
-  dbConnectionWrap(async (client) => {
+  return dbConnectionWrap(async (client) => {
     const values = [user, JSON.stringify(plan)];
-    await client.query(updatePlanQuery, values);
-    console.log(`Successfully stored weekplan for user ${user}`);
+    const result = await client.query(updatePlanQuery, values);
+    if (result && result.rows && result.rows.length > 0) {
+      console.log(`Successfully stored weekplan for user ${user}`);
+    }
+    else {
+      console.log(`Could not store weekplan for user ${user} to DB`);
+      return false;
+    }
   });
 };
 
@@ -39,10 +45,16 @@ exports.retrieveWeekplan = async function retrieveWeekplan(user) {
 };
 
 exports.storeConfig = async (config, user) => {
-  dbConnectionWrap(async (client) => {
+  return dbConnectionWrap(async (client) => {
     const values = [user, JSON.stringify(config)];
-    await client.query(updateConfigQuery, values);
-    console.log(`Successfully stored config for user ${user}`);
+    const result = await client.query(updateConfigQuery, values);
+    if (result && result.rows && result.rows.length > 0) {
+      console.log(`Successfully stored config for user ${user}`);
+    }
+    else {
+      console.log(`Could not store config for user ${user} to DB`);
+      return false;
+    }
   });
 };
 
@@ -53,7 +65,7 @@ exports.retrieveConfig = async (user) => {
     if (res.rows && res.rows.length > 0 && res.rows[0].config) {
       return JSON.parse(res.rows[0].config);
     }
-    return [];
+    return false;
   });
 };
 
