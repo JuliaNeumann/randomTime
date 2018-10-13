@@ -93,5 +93,7 @@ exports[`Config renders the correct markup 1`] = `
       />
     </fieldset>
   </form>
+   
+  <!---->
 </div>
 `;

@@ -19,6 +19,7 @@
                            @click.prevent="submitWeekplan">
                 </fieldset>
             </form>
+            <spinner v-if="loading"></spinner>
             <div class="uk-alert-primary" uk-alert v-if="showSuccess">
                 <a class="uk-alert-close" uk-close></a>
                 <p>Created week plan for {{ numHours }} hours!</p>
@@ -33,6 +34,7 @@
 
 <script>
   import Menu from '../main/menu.vue';
+  import Spinner from '../main/spinner.vue';
   import {userMixin} from '../../mixins/user';
 
   export default {
@@ -40,16 +42,19 @@
     mixins: [userMixin],
     components: {
       Menu,
+      Spinner
     },
     data() {
       return {
         numHours: 0,
         showSuccess: false,
-        error: ''
+        error: '',
+        loading: false
       };
     },
     methods: {
       submitWeekplan() {
+        this.loading = true;
         const postData = {
           hours: this.numHours,
           user: this.user
@@ -58,6 +63,7 @@
         axios
           .post('/weekplan', postData)
           .then(result => {
+            this.loading = false;
             this.showSuccess = true;
           })
           .catch(error => {

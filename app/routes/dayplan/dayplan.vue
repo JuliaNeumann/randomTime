@@ -19,6 +19,7 @@
                            @click.prevent="submitDayplan">
                 </fieldset>
             </form>
+            <spinner v-if="loading"></spinner>
             <h2 class="uk-heading-divider" v-if="tasks.length > 0">Tasks for Today:</h2>
             <ul class="uk-list uk-list-striped" v-if="tasks.length > 0">
                 <li v-for="(task, index) in tasks" :key="index">{{ slotLength }}h: {{ task }}</li>
@@ -37,6 +38,7 @@
 
 <script>
   import Menu from '../main/menu.vue';
+  import Spinner from '../main/spinner.vue';
   import {userMixin} from '../../mixins/user';
 
   export default {
@@ -52,12 +54,13 @@
         message: '',
         error: '',
         slotLength: 0.5,
-        user: ''
+        user: '',
+        loading: false
       };
     },
     methods: {
       submitDayplan() {
-
+        this.loading = true;
         const postData = {
             hours: this.numHours,
             user: this.user
@@ -66,6 +69,7 @@
         axios
           .post('/dayplan', postData)
           .then((response) => {
+            this.loading = false;
             if (typeof response.data.message === 'string') {
               this.message = response.data.message;
               this.tasks = [];

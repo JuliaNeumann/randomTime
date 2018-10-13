@@ -48,11 +48,13 @@
                        @click.prevent="submitConfig">
             </fieldset>
         </form>
+        <spinner v-if="loading"></spinner>
     </div>
 </template>
 
 <script>
   import Menu from '../main/menu.vue';
+  import Spinner from '../main/spinner.vue';
   import {userMixin} from '../../mixins/user';
 
   export default {
@@ -60,13 +62,15 @@
     mixins: [userMixin],
     components: {
       Menu,
+      Spinner
     },
     data() {
       return {
         slotLength: 0.5,
         activities: [],
         showSuccess: false,
-        error: ''
+        error: '',
+        loading: false
       }
     },
     mounted() {
@@ -112,6 +116,7 @@
         return true;
       },
       submitConfig() {
+        this.loading = true;
         this.error = '';
         if (this.checkNames() && this.checkTimes()) {
           axios
@@ -121,6 +126,7 @@
               user: this.user
             })
             .then(result => {
+              this.loading = false;
               this.showSuccess = true;
             })
             .catch(error => {

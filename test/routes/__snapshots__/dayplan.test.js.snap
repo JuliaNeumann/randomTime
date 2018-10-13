@@ -69,6 +69,8 @@ exports[`Dayplan renders the correct markup 1`] = `
     <!---->
      
     <!---->
+     
+    <!---->
   </div>
 </div>
 `;
