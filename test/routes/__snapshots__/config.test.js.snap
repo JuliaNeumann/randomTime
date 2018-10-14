@@ -80,7 +80,7 @@ exports[`Config renders the correct markup 1`] = `
     </div>
      
     <fieldset
-      class="uk-fieldset uk-margin-large"
+      class="uk-fieldset uk-margin"
     >
       <!---->
        

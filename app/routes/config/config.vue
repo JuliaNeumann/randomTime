@@ -35,7 +35,7 @@
                 <input class="uk-input uk-form-width-medium" id="user" type="text"
                        v-model="user">
             </div>
-            <fieldset class="uk-fieldset uk-margin-large">
+            <fieldset class="uk-fieldset uk-margin">
                 <spinner v-if="loading"></spinner>
                 <div class="uk-alert-primary" uk-alert v-if="showSuccess">
                     <p>Successfully created config!</p>

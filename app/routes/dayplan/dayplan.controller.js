@@ -39,7 +39,7 @@ module.exports = (router) => {
      */
     async (req, res) => {
       if (parseInt(req.body.hours) <= 100 && req.body.user) {
-        if (!parseInt(req.body.hours) > 0) {
+        if (!parseFloat(req.body.hours) > 0) {
           res.json({
             message: 'Provide a valid number of hours to get a dayplan.'
           });
